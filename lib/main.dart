@@ -14,12 +14,10 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ProductListCubit(getIt<ProductRepository>()),
-      child: const MaterialApp(
-        home: ProductGridPage(),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => BlocProvider(
+        create: (_) => ProductListCubit(getIt<ProductRepository>()),
+        child: const MaterialApp(
+          home: ProductGridPage(),
+        ),
+      );
 }

@@ -6,7 +6,6 @@ import 'package:products/feature/products/presentation/cubit/product_list_error.
 import 'package:products/feature/products/presentation/cubit/product_list_state.dart';
 import 'package:products/feature/products/domain/models/product.dart';
 import 'package:products/feature/products/domain/repositories/product_repository.dart';
-import 'package:products/feature/products/presentation/cubit/product_list_state.dart';
 
 class MockProductRepository extends Mock implements ProductRepository {}
 

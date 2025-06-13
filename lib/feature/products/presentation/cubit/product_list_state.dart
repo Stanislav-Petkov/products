@@ -20,14 +20,13 @@ class ProductListState extends Equatable {
     List<Product>? products,
     bool? isLoading,
     ProductListError? error,
-  }) {
-    return ProductListState(
-      products:
-          products != null ? UnmodifiableListView(products) : this.products,
-      isLoading: isLoading ?? this.isLoading,
-      error: error,
-    );
-  }
+  }) =>
+      ProductListState(
+        products:
+            products != null ? UnmodifiableListView(products) : this.products,
+        isLoading: isLoading ?? this.isLoading,
+        error: error,
+      );
 
   @override
   List<Object?> get props => [products, isLoading, error];

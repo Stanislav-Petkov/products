@@ -10,16 +10,14 @@ class ProductDataSourceImpl implements ProductDataSource {
     _seedProducts(1, 10);
   }
 
-  void _seedProducts(int startId, int count) {
-    _products.addAll(List.generate(
-        count,
-        (i) => ProductDto(
-              id: startId + i,
-              title: 'Sample Product ${startId + i}',
-              description: 'Description for sample product ${startId + i}',
-              isFavorite: false,
-            )));
-  }
+  void _seedProducts(int startId, int count) => _products.addAll(List.generate(
+      count,
+      (i) => ProductDto(
+            id: startId + i,
+            title: 'Sample Product ${startId + i}',
+            description: 'Description for sample product ${startId + i}',
+            isFavorite: false,
+          )));
 
   @override
   Future<List<ProductDto>> fetchProducts(int start, int count) async {
@@ -50,7 +48,6 @@ class ProductDataSourceImpl implements ProductDataSource {
   }
 
   @override
-  Future<void> removeProduct(int id) async {
-    _products.removeWhere((dto) => dto.id == id);
-  }
+  Future<void> removeProduct(int id) async =>
+      _products.removeWhere((dto) => dto.id == id);
 }

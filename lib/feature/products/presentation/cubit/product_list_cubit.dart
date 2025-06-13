@@ -77,16 +77,12 @@ class ProductListCubit extends Cubit<ProductListState> {
     }, error: ProductListError.markAsFavoriteError);
   }
 
-  void clearError() {
-    emit(state.copyWith(error: null));
-  }
+  void clearError() => emit(state.copyWith(error: null));
 
-  void _emitLoading() {
-    emit(state.copyWith(
-      isLoading: true,
-      error: null,
-    ));
-  }
+  void _emitLoading() => emit(state.copyWith(
+        isLoading: true,
+        error: null,
+      ));
 
   Future<void> _errorHandling(Future<void> Function() action,
       {ProductListError? error}) async {

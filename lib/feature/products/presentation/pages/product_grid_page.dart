@@ -25,29 +25,27 @@ class _ProductGridPageState extends State<ProductGridPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(context),
-      body: BlocConsumer<ProductListCubit, ProductListState>(
-        listener: (context, state) {
-          if (state.error != null) {
-            _handleProductListError(context, state.error!);
-          }
-        },
-        builder: (context, state) {
-          if (state.products.isEmpty && state.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return Stack(
-            children: [
-              _buildProductGrid(state),
-              if (state.isLoading) const ProductLoader(),
-            ],
-          );
-        },
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        appBar: _buildAppBar(context),
+        body: BlocConsumer<ProductListCubit, ProductListState>(
+          listener: (context, state) {
+            if (state.error != null) {
+              _handleProductListError(context, state.error!);
+            }
+          },
+          builder: (context, state) {
+            if (state.products.isEmpty && state.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return Stack(
+              children: [
+                _buildProductGrid(state),
+                if (state.isLoading) const ProductLoader(),
+              ],
+            );
+          },
+        ),
+      );
 
   PreferredSizeWidget _buildAppBar(BuildContext context) => AppBar(
         title: const Text('Products'),
@@ -121,11 +119,10 @@ class _ProductGridPageState extends State<ProductGridPage> {
     }
   }
 
-  void _showSnackBar(BuildContext context, {required String message}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }
+  void _showSnackBar(BuildContext context, {required String message}) =>
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
 
   void _showDialog(BuildContext context, {required String message}) =>
       showDialog(
