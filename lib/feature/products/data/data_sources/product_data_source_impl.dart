@@ -42,11 +42,12 @@ class ProductDataSourceImpl implements ProductDataSource {
   }
 
   @override
-  Future<void> updateFavorite(int id, bool isFavorite) async {
-    final index = _products.indexWhere((dto) => dto.id == id);
-    if (index != -1) {
-      _products[index] = _products[index].copyWith(isFavorite: isFavorite);
-    }
+  Future<ProductDto?> updateFavorite(int id, bool isFavorite) async {
+    final index = _products.indexWhere((p) => p.id == id);
+    if (index == -1) return null;
+    final updated = _products[index].copyWith(isFavorite: isFavorite);
+    _products[index] = updated;
+    return updated;
   }
 
   @override

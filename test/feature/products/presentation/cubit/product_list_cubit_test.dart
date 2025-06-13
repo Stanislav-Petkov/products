@@ -29,7 +29,8 @@ void main() {
     blocTest<ProductListCubit, ProductListState>(
       'emits state with new product when addProduct succeeds',
       build: () {
-        when(() => repository.addProduct(any())).thenAnswer((_) async {});
+        when(() => repository.addProduct(any()))
+            .thenAnswer((_) async => testProduct);
         return cubit;
       },
       act: (cubit) => cubit.addProduct('Test', 'Test Desc'),
@@ -106,7 +107,8 @@ void main() {
     blocTest<ProductListCubit, ProductListState>(
       'emits state with toggled favorite when toggleFavorite succeeds',
       build: () {
-        when(() => repository.updateFavorite(0, true)).thenAnswer((_) async {});
+        when(() => repository.updateFavorite(0, true))
+            .thenAnswer((_) async => testProduct.copyWith(isFavorite: true));
         cubit.emit(cubit.state.copyWith(products: [testProduct]));
         return cubit;
       },
