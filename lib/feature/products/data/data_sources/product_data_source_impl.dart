@@ -21,7 +21,6 @@ class ProductDataSourceImpl implements ProductDataSource {
 
   @override
   Future<List<ProductDto>> fetchProducts(int start, int count) async {
-    await Future.delayed(const Duration(milliseconds: 500));
     while (_products.length < start + count) {
       final lastId = _products.isNotEmpty ? _products.last.id : 0;
       _seedProducts(lastId + 1, 10);
