@@ -28,14 +28,9 @@ class ProductListCubit extends Cubit<ProductListState> {
   Future<void> addProduct(String title, String description) async {
     _emitLoading();
     await _errorHandling(() async {
-      final newProduct = Product(
-        id: state.products.length,
-        title: title,
-        description: description,
-      );
-      await _repository.addProduct(newProduct);
-      final updatedProducts = List<Product>.from(state.products)
-        ..add(newProduct);
+      final temporaryProduct = Product(id: -1, title: title, description: description);
+      final addedProduct = await _repository.addProduct(temporaryProduct);
+      final updatedProducts = List<Product>.from(state.products)..add(addedProduct);
       emit(state.copyWith(
         products: updatedProducts,
         error: null,

@@ -17,9 +17,10 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<void> addProduct(Product product) async {
+  Future<Product> addProduct(Product product) async {
     final dto = ProductDto.fromProduct(product);
-    await dataSource.addProduct(dto);
+    final addedDto = await dataSource.addProduct(dto);
+    return addedDto.toProduct();
   }
 
   @override
