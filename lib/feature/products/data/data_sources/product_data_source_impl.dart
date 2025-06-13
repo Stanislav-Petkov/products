@@ -32,18 +32,22 @@ class ProductDataSourceImpl implements ProductDataSource {
   }
 
   @override
-  Future<void> addProduct(ProductDto dto) async {
-    final lastId = _products.isNotEmpty ? _products.last.id : 0;
-    final newDto = dto.copyWith(id: lastId + 1);
+  Future<ProductDto> addProduct(ProductDto dto) async {
+    final maxId = _products.isNotEmpty
+        ? _products.map((p) => p.id).reduce((a, b) => a > b ? a : b)
+        : 0;
+    final newDto = dto.copyWith(id: maxId + 1);
     _products.add(newDto);
+    return newDto;
   }
 
   @override
-  Future<void> updateFavorite(int id, bool isFavorite) async {
-    final index = _products.indexWhere((dto) => dto.id == id);
-    if (index != -1) {
-      _products[index] = _products[index].copyWith(isFavorite: isFavorite);
-    }
+  Future<ProductDto?> updateFavorite(int id, bool isFavorite) async {
+    final index = _products.indexWhere((p) => p.id == id);
+    if (index == -1) return null;
+    final updated = _products[index].copyWith(isFavorite: isFavorite);
+    _products[index] = updated;
+    return updated;
   }
 
   @override

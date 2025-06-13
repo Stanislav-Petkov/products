@@ -17,14 +17,17 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<void> addProduct(Product product) async {
+  Future<Product> addProduct(Product product) async {
     final dto = ProductDto.fromProduct(product);
-    await dataSource.addProduct(dto);
+    final addedDto = await dataSource.addProduct(dto);
+    return addedDto.toProduct();
   }
 
   @override
-  Future<void> updateFavorite(int id, bool isFavorite) async =>
-      dataSource.updateFavorite(id, isFavorite);
+  Future<Product?> updateFavorite(int id, bool isFavorite) async {
+    final updatedDto = await dataSource.updateFavorite(id, isFavorite);
+    return updatedDto?.toProduct();
+  }
 
   @override
   Future<void> removeProduct(int id) async => dataSource.removeProduct(id);
