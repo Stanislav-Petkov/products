@@ -124,4 +124,78 @@ void main() {
       },
     );
   });
+
+  group('ProductListCubit error cases', () {
+    const testProduct = Product(id: 0, title: 'Test', description: 'Test Desc');
+
+    blocTest<ProductListCubit, ProductListState>(
+      'emits addProductError when addProduct fails',
+      build: () {
+        when(() => repository.addProduct(any())).thenThrow(Exception('fail'));
+        return ProductListCubit(repository);
+      },
+      act: (cubit) => cubit.addProduct('Test', 'Test Desc'),
+      expect: () => [
+        isA<ProductListState>().having((s) => s.isLoading, 'isLoading', true),
+        isA<ProductListState>()
+            .having((s) => s.error, 'error', ProductListError.addProductError)
+            .having((s) => s.isLoading, 'isLoading', false),
+      ],
+    );
+
+    blocTest<ProductListCubit, ProductListState>(
+      'emits markAsFavoriteError when toggleFavorite fails',
+      build: () {
+        when(() => repository.updateFavorite(any(), any()))
+            .thenThrow(Exception('fail'));
+        final cubit = ProductListCubit(repository);
+        cubit.emit(cubit.state.copyWith(products: [testProduct]));
+        return cubit;
+      },
+      act: (cubit) => cubit.toggleFavorite(0),
+      expect: () => [
+        isA<ProductListState>().having((s) => s.isLoading, 'isLoading', true),
+        isA<ProductListState>()
+            .having(
+                (s) => s.error, 'error', ProductListError.markAsFavoriteError)
+            .having((s) => s.isLoading, 'isLoading', false),
+      ],
+    );
+
+    blocTest<ProductListCubit, ProductListState>(
+      'emits loadMoreProductsError when loadMore fails',
+      build: () {
+        when(() => repository.fetchProducts(any(), any()))
+            .thenThrow(Exception('fail'));
+        return ProductListCubit(repository);
+      },
+      act: (cubit) => cubit.loadMore(),
+      expect: () => [
+        isA<ProductListState>().having((s) => s.isLoading, 'isLoading', true),
+        isA<ProductListState>()
+            .having(
+                (s) => s.error, 'error', ProductListError.loadMoreProductsError)
+            .having((s) => s.isLoading, 'isLoading', false),
+      ],
+    );
+
+    blocTest<ProductListCubit, ProductListState>(
+      'emits deleteProductError when removeProduct fails',
+      build: () {
+        when(() => repository.removeProduct(any()))
+            .thenThrow(Exception('fail'));
+        final cubit = ProductListCubit(repository);
+        cubit.emit(cubit.state.copyWith(products: [testProduct]));
+        return cubit;
+      },
+      act: (cubit) => cubit.removeProduct(0),
+      expect: () => [
+        isA<ProductListState>().having((s) => s.isLoading, 'isLoading', true),
+        isA<ProductListState>()
+            .having(
+                (s) => s.error, 'error', ProductListError.deleteProductError)
+            .having((s) => s.isLoading, 'isLoading', false),
+      ],
+    );
+  });
 }
