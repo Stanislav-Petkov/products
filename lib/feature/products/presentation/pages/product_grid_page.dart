@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:products/feature/products/presentation/cubit/product_list_cubit.dart';
 import 'package:products/feature/products/presentation/widgets/add_product_dialog.dart';
 import 'package:products/feature/products/presentation/widgets/product_loader.dart';
-import 'package:products/feature/products/presentation/widgets/product_tile.dart';
+import 'package:products/feature/products/presentation/widgets/product_grid.dart';
 
 class ProductGridPage extends StatefulWidget {
   const ProductGridPage({super.key});
@@ -69,36 +69,11 @@ class _ProductGridPageState extends State<ProductGridPage> {
         ],
       );
 
-  Widget _buildProductGrid(ProductListState state) => GridView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+  Widget _buildProductGrid(ProductListState state) => ProductGrid(
+        products: state.products,
         controller: _scrollController,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-        ),
-        itemCount: state.products.length,
-        itemBuilder: (context, index) {
-          final product = state.products[index];
-          return Dismissible(
-            key: ValueKey(product.id),
-            direction: DismissDirection.endToStart,
-            background: Container(
-              color: Colors.red,
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: const Icon(Icons.delete, color: Colors.white),
-            ),
-            confirmDismiss: (_) async {
-              await context.read<ProductListCubit>().removeProduct(product.id);
-              return false;
-            },
-            child: ProductTile(product: product),
-          );
-        },
+        onRemove: (id) => context.read<ProductListCubit>().removeProduct(id),
       );
-
   void _handleProductListError(BuildContext context, ProductListError error) {
     switch (error) {
       case ProductListError.markAsFavoriteError:

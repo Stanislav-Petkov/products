@@ -28,14 +28,11 @@ class ProductListCubit extends Cubit<ProductListState> {
   Future<void> addProduct(String title, String description) async {
     _emitLoading();
     await _errorHandling(() async {
-      final newProduct = Product(
-        id: state.products.length,
-        title: title,
-        description: description,
-      );
-      await _repository.addProduct(newProduct);
+      final temporaryProduct =
+          Product(id: -1, title: title, description: description);
+      final addedProduct = await _repository.addProduct(temporaryProduct);
       final updatedProducts = List<Product>.from(state.products)
-        ..add(newProduct);
+        ..add(addedProduct);
       emit(state.copyWith(
         products: updatedProducts,
         error: null,
@@ -62,10 +59,18 @@ class ProductListCubit extends Cubit<ProductListState> {
     _emitLoading();
     await _errorHandling(() async {
       final product = state.products.firstWhere((item) => item.id == id);
-      await _repository.updateFavorite(id, !product.isFavorite);
+      final updatedProduct =
+          await _repository.updateFavorite(id, !product.isFavorite);
+      if (updatedProduct == null) {
+        emit(state.copyWith(
+          error: ProductListError.markAsFavoriteError,
+          isLoading: false,
+        ));
+        return;
+      }
       final updatedProducts = state.products.map((item) {
         if (item.id == id) {
-          return item.copyWith(isFavorite: !product.isFavorite);
+          return updatedProduct;
         }
         return item;
       }).toList();
