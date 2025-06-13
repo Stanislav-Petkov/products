@@ -6,7 +6,6 @@ import 'package:products/feature/products/presentation/cubit/product_list_cubit.
 import 'package:products/feature/products/presentation/widgets/add_product_dialog.dart';
 import 'package:products/feature/products/presentation/widgets/product_loader.dart';
 import 'package:products/feature/products/presentation/widgets/product_grid.dart';
-import 'package:products/feature/products/presentation/widgets/product_tile.dart';
 
 class ProductGridPage extends StatefulWidget {
   const ProductGridPage({super.key});
